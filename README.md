@@ -73,8 +73,6 @@ my_app::Build::date           // "2026-10-15", UTC (honors SOURCE_DATE_EPOCH)
   local checkout and skips the download.
 - **Several layers can declare it:** FetchContent's first declaration wins, so a project and its
   dependencies can each declare `up_forever` and only one copy is fetched.
-- **The repo is private:** fetching works over SSH from any machine with the key. CI needs a
-  deploy key or token.
 - **Consumers only get the function:** the root `CMakeLists.txt` returns early when up-forever
   isn't the top-level build, so its tests and targets never land in a consumer's build.
 
