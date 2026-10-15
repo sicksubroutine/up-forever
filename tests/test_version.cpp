@@ -1,25 +1,23 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-#include <doctest/doctest.h>
+#include <doctest.h>
 
 #include <up_forever/version.hpp>
 
 #include <cstdint>
-#include <string_view>
+#include <string>
 
-namespace {
+using up_forever::Version;
 
-  using namespace up_forever::version;
+static_assert(Version::name == "up_forever");
+static_assert(Version::numeric ==
+              ((uint64_t{Version::major} << 32U) | (uint64_t{Version::minor} << 16U) | uint64_t{Version::patch}));
+static_assert(Version::at_least(Version::major, Version::minor, Version::patch));
+static_assert(Version::at_least(0));
+static_assert(!Version::at_least(static_cast<uint16_t>(Version::major + 1)));
 
-  constexpr uint64_t EXPECTED_NUMERIC =
-      (static_cast<uint64_t>(MAJOR_) << 32U) | (static_cast<uint64_t>(MINOR_) << 16U) | static_cast<uint64_t>(PATCH_);
-
-  static_assert(NAME_ == std::string_view{"up-forever"});
-  static_assert(NUMERIC_ == EXPECTED_NUMERIC);
-  static_assert(at_least(MAJOR_, MINOR_, PATCH_));
-
-  TEST_CASE("version exposes generated project metadata") {
-    CHECK(STR_ == std::string_view{"0.0.1"});
-    CHECK(at_least(0, 0, 0));
-  }
-
-} // namespace
+TEST_CASE("the version strings agree with the numbers") {
+  const std::string expected = std::to_string(Version::major) + "." + std::to_string(Version::minor) + "." +
+                               std::to_string(Version::patch);
+  CHECK(Version::version == expected);
+  CHECK(Version::full_string == std::string(Version::name) + " v" + expected);
+}

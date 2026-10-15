@@ -48,7 +48,7 @@ bash scripts/publish.sh
 
 ```bash
 $MASK configure
-cmake --build build --parallel
+cmake --build build
 ```
 
 ## run [args]
@@ -105,7 +105,7 @@ $MASK configure "${compiler:-}"
 cxx="$(sed -n 's/^CMAKE_CXX_COMPILER:[^=]*=//p' build/CMakeCache.txt | head -n 1)"
 bash scripts/configure.sh "$cxx" build-sanitize \
     -DUP_FOREVER_ENABLE_SANITIZERS=ON
-cmake --build build-sanitize --parallel
+cmake --build build-sanitize
 ctest --test-dir build-sanitize --output-on-failure --no-tests=error
 ```
 

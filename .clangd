@@ -9,13 +9,7 @@ Diagnostics:
   UnusedIncludes: Strict
 
 ---
-If:
-  PathMatch: '.*\.c$'
-CompileFlags:
-  Add: [-x, c, -std=c23]
-  Remove: [-std=c++23]
 
----
 If:
   PathMatch: .*\.in$
 Diagnostics:
