@@ -24,8 +24,10 @@ namespace {
 
 static_assert(Matches(Build::date, "####-##-## ##:##:##"), "date is UTC, 24-hour");
 static_assert(Hour(Build::date) <= 23);
-static_assert(Matches(Build::date_actual, "####-##-## ##:##:## AM") || Matches(Build::date_actual, "####-##-## ##:##:## PM"),
-              "date_actual is local, 12-hour with AM/PM");
+static_assert(
+    Matches(Build::date_actual, "####-##-## ##:##:## AM") || Matches(Build::date_actual, "####-##-## ##:##:## PM"),
+    "date_actual is local, 12-hour with AM/PM"
+);
 static_assert(Hour(Build::date_actual) >= 1 && Hour(Build::date_actual) <= 12);
 
 static_assert(!(Build::Policy::Debug() && Build::Policy::Release()), "a build can't be both");

@@ -42,5 +42,5 @@ case "$mode" in
         ;;
 esac
 
-find include src tests -type f \( -name '*.c' -o -name '*.cc' -o -name '*.cpp' -o -name '*.h' -o -name '*.hpp' \) -print0 \
+find up_forever tests -type f \( -name '*.c' -o -name '*.cc' -o -name '*.cpp' -o -name '*.h' -o -name '*.hpp' \) -print0 \
     | xargs -0 "$formatter" "${args[@]}"
