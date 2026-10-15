@@ -1,0 +1,12 @@
+# Changes here will be overwritten by Copier
+_commit: v0.2.0
+_src_path: gh:sicksubroutine/cpp-forge
+author_email: bright.lid5647@fastmail.com
+author_fullname: chaz
+cxx_standard: '23'
+default_compiler: gcc
+executable_name: up-forever
+project_description: Simple Versioning
+project_name: Up Forever
+setup_project: true
+starting_version: 0.0.1

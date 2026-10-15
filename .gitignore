@@ -1,0 +1,34 @@
+# ---- C++ ----
+*.d
+*.slo
+*.lo
+*.o
+*.obj
+*.gch
+*.pch
+*.so
+*.dylib
+*.dll
+*.lai
+*.la
+*.a
+*.lib
+*.exe
+*.out
+*.app
+
+# Build / cache
+build/
+.cache/
+compile_commands.json
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# CMake-generated version header
+generated/

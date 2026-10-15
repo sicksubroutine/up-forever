@@ -1,0 +1,94 @@
+---
+Language: Cpp
+BasedOnStyle: LLVM
+AlignAfterOpenBracket: AlwaysBreak
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: true
+AlignOperands: false
+AlignTrailingComments: true
+AllowShortBlocksOnASingleLine: true
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortIfStatementsOnASingleLine: true
+AllowShortLoopsOnASingleLine: true
+AlwaysBreakAfterDefinitionReturnType: false
+AlwaysBreakTemplateDeclarations: No
+BinPackArguments: false
+BraceWrapping: 
+  AfterCaseLabel: false
+  AfterClass: false
+  AfterControlStatement: Never
+  AfterEnum: false
+  AfterFunction: false
+  AfterNamespace: false
+  AfterStruct: false
+  AfterUnion: false
+  AfterExternBlock: false
+  BeforeCatch: true
+  BeforeElse: true
+  BeforeLambdaBody: false
+  BeforeWhile: true
+  SplitEmptyFunction: false
+  SplitEmptyRecord: false
+  SplitEmptyNamespace: false
+BreakBeforeBraces: Custom
+BreakBeforeTernaryOperators: false
+BreakConstructorInitializers: AfterColon
+BreakConstructorInitializersBeforeComma: false
+ColumnLimit: 140
+ConstructorInitializerAllOnOneLineOrOnePerLine: false
+BreakBeforeCloseBracketFunction: true
+ContinuationIndentWidth: 4
+IncludeCategories: 
+  - Regex: '^<.*'
+    Priority: 1
+  - Regex: '^".*'
+    Priority: 2
+  - Regex: '.*'
+    Priority: 3
+IncludeIsMainRegex: '([-_](test|unittest))?$'
+IndentAccessModifiers: false
+IndentGotoLabels: false
+InsertNewlineAtEOF: true
+MacroBlockBegin: ''
+MacroBlockEnd: ''
+NamespaceIndentation: All
+PointerAlignment: Left
+ReferenceAlignment: Left
+SpaceBeforeCtorInitializerColon: false
+SpaceBeforeInheritanceColon: false
+SpaceBeforeRangeBasedForLoopColon: false
+SpaceInEmptyParentheses: false
+SpacesInAngles: false
+SpacesInConditionalStatement: false
+SpacesInCStyleCastParentheses: false
+SpacesInParentheses: false
+Standard: c++20
+IndentWidth: 2
+TabWidth: 4
+WhitespaceSensitiveMacros: 
+  - UNIFORM_STRUCT
+  - STRONG_FLAGS_OPEN
+  - BLOB_FIELDS
+  - STRONG_ENUM
+  - STRONG_ENUM_STRICT
+  - STRONG_FLAGS
+  - STRONG_ENUM_UINT64
+  - STRONG_ENUM_UINT32
+  - STRONG_ENUM_UINT16
+  - STRONG_ENUM_UINT8
+  - STRONG_ENUM_INT64
+  - STRONG_ENUM_INT32
+  - STRONG_ENUM_INT16
+  - STRONG_ENUM_INT8
+  - STRONG_ENUM_CLOSED
+  - STRONG_ENUM_INT
+  - STRONG_ENUM_STR
+  - STRONG_ENUM_STRICT_UINT64
+  - STRONG_ENUM_STRICT_UINT32
+  - STRONG_ENUM_STRICT_UINT16
+  - STRONG_ENUM_STRICT_UINT8
+  - STRONG_ENUM_STRICT_INT64
+  - STRONG_ENUM_STRICT_INT32
+  - STRONG_ENUM_STRICT_INT16
+  - STRONG_ENUM_STRICT_INT8
+...
