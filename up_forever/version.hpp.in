@@ -4,29 +4,42 @@
 #include <cstdint>
 #include <string_view>
 
+// clang-format off 
+
 namespace @VERSION_NAMESPACE@ {
 
-struct Version {
+    struct Version{
 
-using Self = Version;
+        using Self = Version;
 
-static constexpr std::string_view name        = "@PROJECT_NAME@";
-static constexpr std::string_view version     = "@PROJECT_VERSION@";
-static constexpr std::string_view full_string = "@PROJECT_NAME@ v@PROJECT_VERSION@";
+        static constexpr std::string_view name        = "@PROJECT_NAME@";
+        static constexpr std::string_view version     = "@PROJECT_VERSION@";
+        static constexpr std::string_view full_string = "@PROJECT_NAME@ v@PROJECT_VERSION@";
 
-static constexpr uint16_t major = @PROJECT_VERSION_MAJOR@;
-static constexpr uint16_t minor = @PROJECT_VERSION_MINOR@;
-static constexpr uint16_t patch = @PROJECT_VERSION_PATCH@;
+        static constexpr uint16_t major = @PROJECT_VERSION_MAJOR@;
+        static constexpr uint16_t minor = @PROJECT_VERSION_MINOR@;
+        static constexpr uint16_t patch = @PROJECT_VERSION_PATCH@;
 
-static constexpr uint64_t numeric =
-    (static_cast<uint64_t>(Self::major) << 32U) | (static_cast<uint64_t>(Self::minor) << 16U) | static_cast<uint64_t>(Self::patch);
+        static constexpr uint64_t numeric =
+            (static_cast<uint64_t>(Self::major) << 32U) | 
+            (static_cast<uint64_t>(Self::minor) << 16U) | 
+            static_cast<uint64_t>(Self::patch);
 
-[[nodiscard]] static constexpr bool at_least(uint16_t major_, uint16_t minor_ = 0, uint16_t patch_ = 0) noexcept {
-    const uint64_t requested =
-        (static_cast<uint64_t>(major_) << 32U) | (static_cast<uint64_t>(minor_) << 16U) | static_cast<uint64_t>(patch_);
-    return Self::numeric >= requested;
+        [[nodiscard]] static constexpr bool at_least(uint16_t major_, uint16_t minor_ = 0, uint16_t patch_ = 0) noexcept {
+            const uint64_t requested =
+            (static_cast<uint64_t>(major_) << 32U) | (static_cast<uint64_t>(minor_) << 16U) | static_cast<uint64_t>(patch_);
+            return Self::numeric >= requested;
+        }
+    };
+    
+// clang-format on
+    template <typename Json> void to_json(Json& j, const Version&) {
+    j = Json{
+        {"name", Version::name},
+        {"version", Version::version},
+        {"major", Version::major},
+        {"minor", Version::minor},
+        {"patch", Version::patch}};
 }
-
-};
 
 } // namespace @VERSION_NAMESPACE@
