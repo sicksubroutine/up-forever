@@ -30,8 +30,11 @@ def at_least(major: int, minor: int = 0, patch: int = 0) -> bool:
 
 __all__ = [
     "ENV_VARIABLE",
+    "MAJOR",
+    "MINOR",
     "MODULE_NAME",
     "PACKAGE_NAME",
+    "PATCH",
     "at_least",
     "full_version",
     "version",
