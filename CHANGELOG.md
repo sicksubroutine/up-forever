@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
+## [v0.1.3](https://github.com/sicksubroutine/up-forever/releases/tag/v0.1.3) - 2026-10-25
+
+<small>[Compare with v0.1.2](https://github.com/sicksubroutine/up-forever/compare/v0.1.2...v0.1.3)</small>
+
+### Code Refactoring
+
+- improve comments for PACKAGE_NAME, MODULE_NAME, and ENV_VARIABLE in version.py.in ([049e628](https://github.com/sicksubroutine/up-forever/commit/049e628f23e3fb12a858fd632ce01c117ccee53f) by chaz).
+
 ## [v0.1.2](https://github.com/sicksubroutine/up-forever/releases/tag/v0.1.2) - 2026-10-25
 
 <small>[Compare with v0.1.1](https://github.com/sicksubroutine/up-forever/compare/v0.1.1...v0.1.2)</small>
