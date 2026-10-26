@@ -79,4 +79,25 @@ if(BUILD_TESTING)
         NAMESPACE up_forever
         OUT "${PROJECT_GENERATED_INCLUDE_DIR}/up_forever/build_info.hpp"
     )
+
+    # The Python module, with the names derived from project() and with both overridden. -B: a cached
+    # .pyc would outlive a regenerated version.py when the size and the second match.
+    find_package(Python3 3.12 COMPONENTS Interpreter QUIET) # the template's `type` aliases need 3.12
+    if(Python3_FOUND)
+        set(python_dir "${CMAKE_CURRENT_BINARY_DIR}/generated/python")
+        up_forever_python(OUT "${python_dir}/derived/version.py")
+        up_forever_python(OUT "${python_dir}/overridden/version.py" PACKAGE pyforever MODULE forever_core)
+        add_test(
+            NAME "up_forever_python: names from project()"
+            COMMAND "${Python3_EXECUTABLE}" -I -B "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_version_py.py" "${python_dir}/derived/version.py"
+                    "${PROJECT_VERSION}" up-forever up_forever UP_FOREVER_ENV up_forever
+        )
+        add_test(
+            NAME "up_forever_python: PACKAGE and MODULE override them"
+            COMMAND "${Python3_EXECUTABLE}" -I -B "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_version_py.py" "${python_dir}/overridden/version.py"
+                    "${PROJECT_VERSION}" pyforever forever_core FOREVER_CORE_ENV up_forever
+        )
+    else()
+        message(STATUS "up-forever: no Python 3.12+, so the up_forever_python tests are skipped")
+    endif()
 endif()

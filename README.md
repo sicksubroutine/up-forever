@@ -67,6 +67,33 @@ my_app::Build::date           // "2026-10-15", UTC (honors SOURCE_DATE_EPOCH)
 - **The git values and date are captured when CMake configures**, so they update on the next
   reconfigure, not on every build.
 
+## Python (optional)
+
+The same facts as a Python module, for projects with a Python side.
+
+```cmake
+up_forever_python(OUT "${CMAKE_CURRENT_SOURCE_DIR}/src/my_app/version.py")
+```
+
+```python
+from my_app import version
+
+version.PACKAGE_NAME   # "my-app"  (what pip installs)
+version.MODULE_NAME    # "my_app"  (what you import)
+version.ENV_VARIABLE   # "MY_APP_ENV"
+version.version        # "1.2.3"
+version.version_tuple  # (1, 2, 3); MAJOR, MINOR, PATCH likewise
+version.at_least(1, 2) # True
+```
+
+- **Both names come from `project()`**, with `_` and `-` swapped to fit, so `project(my_app)` and
+  `project(my-app)` give the same pair. `PACKAGE <name>` and `MODULE <name>` override them; a
+  `MODULE` that isn't a valid identifier stops CMake.
+- **Every value is a `Literal` type**, so a type checker knows the exact version you imported. The
+  `type` aliases need Python 3.12+.
+- **It's written when CMake configures.** A Python build that doesn't run CMake packages whatever
+  file is there, so write it into the source tree and commit it, like a lockfile.
+
 ## Notes
 
 - **Offline or local work:** `-DFETCHCONTENT_SOURCE_DIR_UP_FOREVER=/path/to/up-forever` uses a
