@@ -3,9 +3,9 @@ from __future__ import annotations
 
 from typing import Final, Literal
 
-PACKAGE_NAME: Literal["@UF_PACKAGE@"] = "@UF_PACKAGE@"         # up-forever (uv pip install)
-MODULE_NAME:  Literal["@UF_MODULE@"]  = "@UF_MODULE@"          # up_forever (import up_forever)
-ENV_VARIABLE: Literal["@UF_ENV_PREFIX@_ENV"] = "@UF_ENV_PREFIX@_ENV"  # UP_FOREVER_ENV (env var)
+PACKAGE_NAME: Literal["@UF_PACKAGE@"] = "@UF_PACKAGE@"               # Installation Name: uv pip install @UF_PACKAGE@
+MODULE_NAME:  Literal["@UF_MODULE@"]  = "@UF_MODULE@"                # import @UF_MODULE@
+ENV_VARIABLE: Literal["@UF_ENV_PREFIX@_ENV"] = "@UF_ENV_PREFIX@_ENV" # env var: export @UF_ENV_PREFIX@_ENV=1
 
 type MajLiteral = Literal[@PROJECT_VERSION_MAJOR@]
 type MinLiteral = Literal[@PROJECT_VERSION_MINOR@]
@@ -25,3 +25,13 @@ full_version: Literal["@PROJECT_NAME@ v@PROJECT_VERSION@"] = "@PROJECT_NAME@ v@P
 
 def at_least(major: int, minor: int = 0, patch: int = 0) -> bool:
     return version_tuple >= (major, minor, patch)
+
+__all__ = [
+    "PACKAGE_NAME",
+    "MODULE_NAME",
+    "ENV_VARIABLE",
+    "version_tuple",
+    "version",
+    "full_version",
+    "at_least",
+]
