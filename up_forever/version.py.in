@@ -23,15 +23,17 @@ version: Literal["@PROJECT_VERSION@"] = "@PROJECT_VERSION@"
 
 full_version: Literal["@PROJECT_NAME@ v@PROJECT_VERSION@"] = "@PROJECT_NAME@ v@PROJECT_VERSION@"
 
+
 def at_least(major: int, minor: int = 0, patch: int = 0) -> bool:
     return version_tuple >= (major, minor, patch)
 
+
 __all__ = [
-    "PACKAGE_NAME",
-    "MODULE_NAME",
     "ENV_VARIABLE",
-    "version_tuple",
-    "version",
-    "full_version",
+    "MODULE_NAME",
+    "PACKAGE_NAME",
     "at_least",
+    "full_version",
+    "version",
+    "version_tuple",
 ]
