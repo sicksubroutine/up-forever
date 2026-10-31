@@ -51,15 +51,6 @@ $MASK configure
 cmake --build build
 ```
 
-## run [args]
-
-> Build and run the executable, forwarding optional arguments.
-
-```bash
-$MASK build >/dev/null
-./build/bin/up-forever ${args:-}
-```
-
 ## test
 
 > Build and run every registered test. An empty suite is an error.
