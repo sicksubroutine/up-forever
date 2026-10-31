@@ -53,13 +53,19 @@ up_forever_build_info(TARGET my_app NAMESPACE my_app OUT "${CMAKE_CURRENT_BINARY
 ```cpp
 #include <my_app/build_info.hpp>   // only from my_app's own sources
 
-my_app::Build::configuration  // "Debug", "Release", "RelWithDebInfo", "MinSizeRel", or "None"
-my_app::Build::debug          // configuration == "Debug"
-my_app::Build::release        // any of the three release configurations
 my_app::Build::git_sha        // "b1bf1e7e2f3a", or "unknown" outside a git checkout
 my_app::Build::git_dirty      // uncommitted changes when CMake configured
-my_app::Build::date           // "2026-10-15", UTC (honors SOURCE_DATE_EPOCH)
+my_app::Build::date           // "2026-10-15 07:26:43", UTC, 24-hour
+my_app::Build::date_actual    // "2026-10-15 12:26:43 AM", local time, 12-hour
+
+my_app::Build::Policy::Config()          // "Debug", "Release", "RelWithDebInfo", "MinSizeRel", or "None"
+my_app::Build::Policy::Debug()           // Config() == "Debug"
+my_app::Build::Policy::Release()         // Config() == "Release" only
+my_app::Build::Policy::RelWithDebInfo()  // likewise
+my_app::Build::Policy::MinSizeRel()      // likewise
 ```
+
+Both dates honor `SOURCE_DATE_EPOCH`, for reproducible builds.
 
 - **The configuration comes from the target at build time** (a compile definition), because
   multi-config generators like Xcode and Visual Studio only know it then. Including the header from
@@ -69,10 +75,32 @@ my_app::Build::date           // "2026-10-15", UTC (honors SOURCE_DATE_EPOCH)
 
 ## Python (optional)
 
-The same facts as a Python module, for projects with a Python side.
+The same facts as a Python module, for projects with a Python side. With scikit-build-core, the
+`version` in `pyproject.toml` is the only place the number lives (no `dynamic`):
+
+```toml
+[project]
+name = "my-app"
+version = "1.2.3"
+
+[build-system]
+requires = ["scikit-build-core"]
+build-backend = "scikit_build_core.build"
+```
 
 ```cmake
-up_forever_python(OUT "${CMAKE_CURRENT_SOURCE_DIR}/src/my_app/version.py")
+if(NOT DEFINED SKBUILD_PROJECT_VERSION)
+    message(FATAL_ERROR "build my_app through pyproject.toml (`uv build`, or `uv sync` for an editable install)")
+endif()
+project(my_app VERSION ${SKBUILD_PROJECT_VERSION} LANGUAGES CXX)
+
+# ...FetchContent up_forever as above...
+
+up_forever_python(OUT "${CMAKE_CURRENT_BINARY_DIR}/version.py")
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/version.py" DESTINATION my_app)
+if(SKBUILD_STATE STREQUAL "editable")
+    up_forever_python(OUT "${CMAKE_CURRENT_SOURCE_DIR}/src/my_app/version.py")
+endif()
 ```
 
 ```python
@@ -82,6 +110,7 @@ version.PACKAGE_NAME   # "my-app"  (what pip installs)
 version.MODULE_NAME    # "my_app"  (what you import)
 version.ENV_VARIABLE   # "MY_APP_ENV"
 version.version        # "1.2.3"
+version.full_version   # "my_app v1.2.3"
 version.version_tuple  # (1, 2, 3); MAJOR, MINOR, PATCH likewise
 version.at_least(1, 2) # True
 ```
@@ -91,8 +120,9 @@ version.at_least(1, 2) # True
   `MODULE` that isn't a valid identifier stops CMake.
 - **Every value is a `Literal` type**, so a type checker knows the exact version you imported. The
   `type` aliases need Python 3.12+.
-- **It's written when CMake configures.** A Python build that doesn't run CMake packages whatever
-  file is there, so write it into the source tree and commit it, like a lockfile.
+- **The wheel gets it from the build directory**, so a wheel build never writes into `src/`. An
+  editable install (`uv sync`) imports straight from `src/`, so that build drops a copy there too;
+  gitignore it, since it's regenerated on every configure.
 
 ## Notes
 
