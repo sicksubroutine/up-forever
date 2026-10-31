@@ -44,6 +44,17 @@ else()
     )
 endif()
 
+option(UP_FOREVER_ENABLE_SANITIZERS "Build the tests with AddressSanitizer and UndefinedBehaviorSanitizer" OFF)
+if(UP_FOREVER_ENABLE_SANITIZERS)
+    # MSVC has ASan but no UBSan; stopping beats a sanitize run that quietly checks half of what it says.
+    if(MSVC)
+        message(FATAL_ERROR "UP_FOREVER_ENABLE_SANITIZERS needs GCC or Clang (MSVC has no UndefinedBehaviorSanitizer)")
+    endif()
+    set(sanitizer_flags -fsanitize=address,undefined -fno-sanitize-recover=all -fno-omit-frame-pointer)
+    target_compile_options(project_options INTERFACE ${sanitizer_flags})
+    target_link_options(project_options INTERFACE ${sanitizer_flags})
+endif()
+
 # up-forever eats its own cooking: its header comes from the same function consumers call.
 set(PROJECT_GENERATED_INCLUDE_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated/include")
 up_forever_header(NAMESPACE up_forever OUT "${PROJECT_GENERATED_INCLUDE_DIR}/up_forever/version.hpp")
