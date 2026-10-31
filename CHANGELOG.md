@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
+## [v0.1.4](https://github.com/sicksubroutine/up-forever/releases/tag/v0.1.4) - 2026-10-31
+
+<small>[Compare with v0.1.3](https://github.com/sicksubroutine/up-forever/compare/v0.1.3...v0.1.4)</small>
+
+### Bug Fixes
+
+- make UP_FOREVER_ENABLE_SANITIZERS a real option ([70931ce](https://github.com/sicksubroutine/up-forever/commit/70931ce413561b31e0b0eb8989d14036d7bb0193) by chaz). Co-authored-by: Mortar <mortar@sicksubroutine>
+
+### Code Refactoring
+
+- reorder __all__ exports for improved clarity ([5c9b8bf](https://github.com/sicksubroutine/up-forever/commit/5c9b8bf7dceed09ff3033680958ec32a9fb7072c) by chaz).
+- reorder __all__ exports and add spacing to match likely formatting ([4598570](https://github.com/sicksubroutine/up-forever/commit/4598570dbbb696960009ff47753a338865652852) by chaz).
+
 ## [v0.1.3](https://github.com/sicksubroutine/up-forever/releases/tag/v0.1.3) - 2026-10-25
 
 <small>[Compare with v0.1.2](https://github.com/sicksubroutine/up-forever/compare/v0.1.2...v0.1.3)</small>
