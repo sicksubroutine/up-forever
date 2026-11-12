@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
+## [v0.1.5](https://github.com/sicksubroutine/up-forever/releases/tag/v0.1.5) - 2026-11-11
+
+<small>[Compare with v0.1.4](https://github.com/sicksubroutine/up-forever/compare/v0.1.4...v0.1.5)</small>
+
 ## [v0.1.4](https://github.com/sicksubroutine/up-forever/releases/tag/v0.1.4) - 2026-10-31
 
 <small>[Compare with v0.1.3](https://github.com/sicksubroutine/up-forever/compare/v0.1.3...v0.1.4)</small>
