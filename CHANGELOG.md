@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
+## [v0.1.7](https://github.com/sicksubroutine/up-forever/releases/tag/v0.1.7) - 2026-11-13
+
+<small>[Compare with v0.1.6](https://github.com/sicksubroutine/up-forever/compare/v0.1.6...v0.1.7)</small>
+
+### Features
+
+- let builds without .git supply the commit ([086fabc](https://github.com/sicksubroutine/up-forever/commit/086fabc48714c6f3bfe744df74e26b918ec08421) by chaz). Co-authored-by: Mortar <mortar@sicksubroutine>
+
 ## [v0.1.6](https://github.com/sicksubroutine/up-forever/releases/tag/v0.1.6) - 2026-11-13
 
 <small>[Compare with v0.1.5](https://github.com/sicksubroutine/up-forever/compare/v0.1.5...v0.1.6)</small>
