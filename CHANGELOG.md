@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
+## [v0.1.6](https://github.com/sicksubroutine/up-forever/releases/tag/v0.1.6) - 2026-11-13
+
+<small>[Compare with v0.1.5](https://github.com/sicksubroutine/up-forever/compare/v0.1.5...v0.1.6)</small>
+
+### Code Refactoring
+
+- rename numeric function to numeric_pack for clarity ([5013afe](https://github.com/sicksubroutine/up-forever/commit/5013afeb056b8761511b1e34d85ae388ab0eda1c) by chaz).
+- simplify numeric calculation and improve readability ([e16e488](https://github.com/sicksubroutine/up-forever/commit/e16e488dd38f11d64f16d5eac6bf228ffdff0cf9) by chaz).
+
 ## [v0.1.5](https://github.com/sicksubroutine/up-forever/releases/tag/v0.1.5) - 2026-11-11
 
 <small>[Compare with v0.1.4](https://github.com/sicksubroutine/up-forever/compare/v0.1.4...v0.1.5)</small>
