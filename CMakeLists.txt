@@ -91,6 +91,14 @@ if(BUILD_TESTING)
         OUT "${PROJECT_GENERATED_INCLUDE_DIR}/up_forever/build_info.hpp"
     )
 
+    find_package(Git REQUIRED)
+    add_test(
+        NAME "up_forever_build_info: git provenance, discovered and given"
+        COMMAND "${CMAKE_COMMAND}" "-DUP_FOREVER_ROOT=${CMAKE_CURRENT_SOURCE_DIR}"
+                "-DWORK=${CMAKE_CURRENT_BINARY_DIR}/provenance" "-DCXX=${CMAKE_CXX_COMPILER}"
+                "-DGIT=${GIT_EXECUTABLE}" -P "${CMAKE_CURRENT_SOURCE_DIR}/tests/build_info_provenance.cmake"
+    )
+
     # The Python module, with the names derived from project() and with both overridden. -B: a cached
     # .pyc would outlive a regenerated version.py when the size and the second match.
     find_package(Python3 3.12 COMPONENTS Interpreter QUIET) # the template's `type` aliases need 3.12

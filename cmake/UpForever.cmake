@@ -1,5 +1,13 @@
 include_guard(GLOBAL)
 
+# Container builds often leave .git out of the context, so whoever runs the build (and knows the
+# commit) can say it here. Inside a checkout git still decides, and these must agree with it, so a
+# stale cache entry can't relabel a build.
+set(UP_FOREVER_GIT_SHA "" CACHE STRING
+    "Commit for up_forever_build_info() when the source tree isn't a git checkout (12+ hex digits)")
+set(UP_FOREVER_GIT_DIRTY "" CACHE STRING
+    "ON or OFF: whether that tree had uncommitted changes (required with UP_FOREVER_GIT_SHA)")
+
 function(_up_forever_require_version caller)
     if(NOT PROJECT_VERSION MATCHES "^[0-9]+\\.[0-9]+\\.[0-9]+$")
         message(FATAL_ERROR "${caller}: project(${PROJECT_NAME}) needs VERSION MAJOR.MINOR.PATCH, got '${PROJECT_VERSION}'")
@@ -54,6 +62,88 @@ function(up_forever_python)
     configure_file("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/../up_forever/version.py.in" "${arg_OUT}" @ONLY)
 endfunction()
 
+# Sets GIT_SHA and GIT_DIRTY in the caller: from the checkout when PROJECT_SOURCE_DIR is in one,
+# else from UP_FOREVER_GIT_SHA/UP_FOREVER_GIT_DIRTY, else "unknown" and false.
+function(_up_forever_git_provenance)
+    set(head "")
+    set(short "")
+    set(dirty "false")
+    find_package(Git QUIET)
+    if(GIT_FOUND)
+        execute_process(
+            COMMAND "${GIT_EXECUTABLE}" rev-parse HEAD
+            WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
+            OUTPUT_VARIABLE head
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+            RESULT_VARIABLE head_result
+            ERROR_QUIET
+        )
+        if(head_result EQUAL 0)
+            execute_process(
+                COMMAND "${GIT_EXECUTABLE}" rev-parse --short=12 HEAD
+                WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
+                OUTPUT_VARIABLE short
+                OUTPUT_STRIP_TRAILING_WHITESPACE
+            )
+            execute_process(
+                COMMAND "${GIT_EXECUTABLE}" status --porcelain
+                WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
+                OUTPUT_VARIABLE changes
+                ERROR_QUIET
+            )
+            if(NOT changes STREQUAL "")
+                set(dirty "true")
+            endif()
+        else()
+            set(head "")
+        endif()
+    endif()
+
+    set(given_sha "")
+    if(NOT UP_FOREVER_GIT_SHA STREQUAL "")
+        string(TOLOWER "${UP_FOREVER_GIT_SHA}" given_sha)
+        string(LENGTH "${given_sha}" given_length)
+        if(NOT given_sha MATCHES "^[0-9a-f]+$" OR given_length LESS 12)
+            message(FATAL_ERROR "UP_FOREVER_GIT_SHA must be a commit hash of 12 or more hex digits, got '${UP_FOREVER_GIT_SHA}'")
+        endif()
+    endif()
+    set(given_dirty "")
+    if(NOT UP_FOREVER_GIT_DIRTY STREQUAL "")
+        string(TOUPPER "${UP_FOREVER_GIT_DIRTY}" flag)
+        if(flag MATCHES "^(ON|YES|TRUE|Y|1)$")
+            set(given_dirty "true")
+        elseif(flag MATCHES "^(OFF|NO|FALSE|N|0)$")
+            set(given_dirty "false")
+        else()
+            message(FATAL_ERROR "UP_FOREVER_GIT_DIRTY must be ON or OFF, got '${UP_FOREVER_GIT_DIRTY}'")
+        endif()
+    endif()
+
+    if(NOT head STREQUAL "")
+        string(FIND "${head}" "${given_sha}" at)
+        if(NOT given_sha STREQUAL "" AND NOT at EQUAL 0)
+            message(FATAL_ERROR "UP_FOREVER_GIT_SHA (${given_sha}) doesn't match this checkout's HEAD (${head}); unset it to use the checkout's commit")
+        endif()
+        if(NOT given_dirty STREQUAL "" AND NOT given_dirty STREQUAL dirty)
+            message(FATAL_ERROR "UP_FOREVER_GIT_DIRTY says ${given_dirty}, but this checkout's dirty state is ${dirty}; unset it to use the checkout's state")
+        endif()
+        set(sha "${short}")
+    elseif(NOT given_sha STREQUAL "")
+        if(given_dirty STREQUAL "")
+            message(FATAL_ERROR "UP_FOREVER_GIT_SHA needs UP_FOREVER_GIT_DIRTY=ON or OFF: outside a checkout up-forever can't see whether the tree had changes")
+        endif()
+        string(SUBSTRING "${given_sha}" 0 12 sha)
+        set(dirty "${given_dirty}")
+    elseif(NOT given_dirty STREQUAL "")
+        message(FATAL_ERROR "UP_FOREVER_GIT_DIRTY only applies together with UP_FOREVER_GIT_SHA")
+    else()
+        set(sha "unknown")
+    endif()
+
+    set(GIT_SHA "${sha}" PARENT_SCOPE)
+    set(GIT_DIRTY "${dirty}" PARENT_SCOPE)
+endfunction()
+
 # up_forever_build_info(TARGET <target> NAMESPACE <ns> OUT <file>)
 #
 # Writes an opt-in Build struct: the build configuration, plus the git commit, dirty flag and
@@ -69,31 +159,7 @@ function(up_forever_build_info)
         message(FATAL_ERROR "up_forever_build_info: ${arg_TARGET} isn't a target (create it first)")
     endif()
 
-    set(GIT_SHA "unknown")
-    set(GIT_DIRTY "false")
-    find_package(Git QUIET)
-    if(GIT_FOUND)
-        execute_process(
-            COMMAND "${GIT_EXECUTABLE}" rev-parse --short=12 HEAD
-            WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
-            OUTPUT_VARIABLE sha
-            OUTPUT_STRIP_TRAILING_WHITESPACE
-            RESULT_VARIABLE sha_result
-            ERROR_QUIET
-        )
-        if(sha_result EQUAL 0)
-            set(GIT_SHA "${sha}")
-            execute_process(
-                COMMAND "${GIT_EXECUTABLE}" status --porcelain
-                WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
-                OUTPUT_VARIABLE changes
-                ERROR_QUIET
-            )
-            if(NOT changes STREQUAL "")
-                set(GIT_DIRTY "true")
-            endif()
-        endif()
-    endif()
+    _up_forever_git_provenance()
 
     string(TIMESTAMP hour "%H")
     if(hour LESS 12)

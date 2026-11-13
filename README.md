@@ -72,6 +72,18 @@ Both dates honor `SOURCE_DATE_EPOCH`, for reproducible builds.
   a different target is a compile error that says so.
 - **The git values and date are captured when CMake configures**, so they update on the next
   reconfigure, not on every build.
+- **Building without `.git`** (a container build that leaves it out of the context, a source
+  tarball): whoever runs the build can supply the commit, and must say whether the tree was dirty,
+  since up-forever can't look:
+
+  ```bash
+  cmake -S . -B build -DUP_FOREVER_GIT_SHA="$(git rev-parse HEAD)" -DUP_FOREVER_GIT_DIRTY=OFF
+  ```
+
+  The SHA needs 12+ hex digits and is shortened to 12, like the discovered one. Inside a checkout
+  git still decides: an override that disagrees with HEAD or the dirty state stops CMake instead
+  of relabeling the build, so a stale cache entry can't lie. Through scikit-build-core, pass them
+  as `cmake.define.UP_FOREVER_GIT_SHA` and `cmake.define.UP_FOREVER_GIT_DIRTY`.
 
 ## Python (optional)
 
